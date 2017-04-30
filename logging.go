@@ -97,6 +97,6 @@ func (this *logger) Log(level Level, out ...interface{}) {
 			fmt.Fprint(&tmp, o)
 		}
 
-		log.Print(tmp.String())
+		log.Output(3, tmp.String())
 	}
 }

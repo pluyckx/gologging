@@ -1,4 +1,3 @@
-
 /*
    Copyright 2017 Philip Luyckx
 
@@ -19,6 +18,7 @@ package logging
 
 import (
 	"testing"
+	"bytes"
 )
 
 type TestWriter struct {
@@ -81,5 +81,21 @@ func TestDebug(t *testing.T) {
 
 	if out.Data != expected {
 		t.Errorf("Expected '%s', received '%s'", expected, out.Data)
+	}
+}
+
+func TestRotate(t *testing.T) {
+	out, err := NewRotateFile("/tmp/logs/test.log", 100, SIZE_STRICT, 3)
+	if err != nil {
+		t.Error("Could not create file logger, error:", err)
+	} else {
+		msg := bytes.NewBufferString("Dit is een test.\n")
+		err = out.Open()
+		if err != nil {
+			defer out.Close()
+			out.Write(msg.Bytes())
+		} else {
+			t.Error("Could not open rotate file!")
+		}
 	}
 }
